@@ -26,7 +26,7 @@ Each pair is designed to hold **only one variable constant**, ensuring controlle
 
 ## 🎛️ Prompt Delivery Plan
 
-- Prompts will be run **through GPT-t and Claude Sonnet 4.5**.
+- Prompts will be run **through GPT-5 and Claude Sonnet 4.5**.
 - Each model will be prompted with **Prompt A** and **Prompt B** independently.
 - Model responses will be saved in the `/results/` folder by prompt pair.
 
