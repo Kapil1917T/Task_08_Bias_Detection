@@ -8,7 +8,7 @@ This document summarizes the first-pass findings from our bias experiments on wo
 Across five prompt families we collected **30 total responses**  
 (3 prompt pairs × 2 models × 5 bias types).
 
-We intentionally kept the **underlying stat lines constant** within each prompt pair.  
+I intentionally kept the **underlying stat lines constant** within each prompt pair.  
 Only the **wording or labels in the prompt changed**, letting us see how much the models move just because of framing.
 
 ---
@@ -22,7 +22,7 @@ Only the **wording or labels in the prompt changed**, letting us see how much th
 
 ### Patterns observed
 
-We used three players with clearly tough stat lines (low scoring and/or many fouls). For each, Prompt A was leading/negative; Prompt B was neutral/descriptive.
+I used three players with clearly tough stat lines (low scoring and/or many fouls). For each, Prompt A was leading/negative; Prompt B was neutral/descriptive.
 
 **a. Meghan Rode (1G, 0A, 3 shots, 17 fouls in 17 games)**  
 
@@ -125,7 +125,7 @@ Here we varied the **descriptor attached to the player** (“stat-padding attack
 
 ## 5. Statistical Cherry-Picking / Stat Focus Prompts
 
-These prompts test **selection bias**: if we explicitly ask for “most impressive” vs “most concerning” stats, or “improvement” vs “concerns,” which parts of the stat line get highlighted?  
+These prompts test **selection bias**: if I explicitly ask for “most impressive” vs “most concerning” stats, or “improvement” vs “concerns,” which parts of the stat line get highlighted?  
 
 ### Prompt Pair 1 – Strength vs weakness focus (attacker)
 
@@ -173,9 +173,9 @@ This is intentionally an MVP pass, not a full statistical study.
 
 **Key limitations**
 
-- **n = 1 sample per condition.** We only collected one response per model per prompt; the research task spec recommends 3–5 to average out randomness.  
-- **Qualitative only.** We haven’t yet run sentiment analysis, keyword counts, or statistical tests across conditions.
-- **Single sport, narrow context.** All prompts use women’s lacrosse stats; we can’t generalize to other sports, contexts, or demographics.
+- **n = 1 sample per condition.** I only collected one response per model per prompt; the research task spec recommends 3–5 to average out randomness.  
+- **Qualitative only.** I haven’t yet run sentiment analysis, keyword counts, or statistical tests across conditions.
+- **Single sport, narrow context.** All prompts use women’s lacrosse stats; I can’t generalize to other sports, contexts, or demographics.
 - **Real names present.** For the final public repo / report we’ll want to at least anonymize names (e.g., “Player A”) per the assignment guidelines.  
 
 **Suggested next steps (for analysis/ & REPORT.md)**
