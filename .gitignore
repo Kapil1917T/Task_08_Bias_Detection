@@ -1,0 +1,26 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+*.egg-info/
+.env
+
+# Notebooks & checkpoints
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+
+# IDE settings
+.vscode/
+.idea/
+
+# data files
+data/
