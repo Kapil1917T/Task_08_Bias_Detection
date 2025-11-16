@@ -80,6 +80,12 @@ Prompt execution is fully scripted via `run_experiments.py`:
      - For each pair, call **both models** with Prompt A and then Prompt B independently.
    - Save all responses to `/results/{bias_type}_results.json`.
 
+   - Prompts are executed programmatically using `run_experiments.py`.
+   - For each prompt pair (A/B), we call:
+     - **GPT-4o** via the OpenAI API (primary model for analysis).
+     - **LLaMA 4 Maverick Instruct** via the Groq API (secondary model for comparison), where available.
+   - Model responses are saved as structured JSON files under the `/results/` folder, one file per bias type.
+
 3. **Output Structure**  
    Each JSON result file is a list of records:
 
