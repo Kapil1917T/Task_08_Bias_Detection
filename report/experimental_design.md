@@ -1,50 +1,94 @@
 # 🧪 Experimental Design — Task 08 (Bias Detection in LLM Narratives)
 
 ## 🎯 Objective
-To detect and analyze the presence of **biases in LLM-generated outputs** based on different styles of prompting. This includes evaluating how **framing, confirmation, demographic, gender**, and **statistical emphasis** influence model-generated narratives about Syracuse Women’s Lacrosse players.
 
-## 🧠 Hypothesis
-We hypothesize that **biased prompts (e.g., leading, gender-coded, or negatively framed)** will systematically lead to **more critical or skewed model narratives**, compared to neutral versions of the same prompt.
+To detect and analyze the presence of **biases in LLM-generated narratives** about Syracuse Women’s Lacrosse players, based on how we phrase the prompt.  
+We specifically test whether changes in:
 
-## 🧩 Bias Dimensions Tested
+- **Framing** (positive vs negative wording)  
+- **Confirmation** (leading vs open-ended questions)  
+- **Gender mention** (with vs without “female” language)  
+- **Experience / role labels** (senior vs freshman, midfield vs defense)  
+- **Statistical emphasis** (strength vs weakness focus)
 
-| Bias Type              | Description                                                                 |
-|------------------------|-----------------------------------------------------------------------------|
-| Framing Bias           | Do positive vs. negative framings (e.g., “standout” vs. “disappoint”) shift tone? |
-| Confirmation Bias      | Do leading vs. open-ended questions affect narrative objectivity?           |
-| Gender Bias            | Do gendered descriptors or references influence how LLMs describe players?  |
-| Demographic Bias       | Do identity-based cues (race, nationality, etc.) skew narrative content?    |
-| Stat Focus Bias        | Does emphasis on a single stat (e.g., goals vs. turnovers) shape conclusions?|
-
-## 🧾 Prompt Format
-
-Each prompt category has 2–3 prompt **pairs**, structured as:
-1. Prompt A (Biased)
-2. Prompt B (Neutral)
-
-Each pair is designed to hold **only one variable constant**, ensuring controlled comparison. Prompts use anonymized identifiers like *Player A*, *Player B*.
-
-## 🎛️ Prompt Delivery Plan
-
-- Prompts will be run **through GPT-5 and Claude Sonnet 4.5**.
-- Each model will be prompted with **Prompt A** and **Prompt B** independently.
-- Model responses will be saved in the `/results/` folder by prompt pair.
-
-## 📏 Evaluation Strategy
-
-Responses will be evaluated along:
-- **Sentiment polarity** (positive / negative / neutral)
-- **Tone analysis** (subjective, judgmental, objective)
-- **Narrative skew** (e.g., emphasis on failure vs. success)
-- **Lexical cues** (e.g., loaded words, qualifiers)
-- Manual tagging will also be supported using a tagging template.
-
-## 🧮 Sampling Plan
-
-- 2–3 prompt pairs per bias category
-- Total prompts ≈ 10–15
-- Repeated over multiple anonymized player stats (Player A, B, C…)
+lead to systematically different model responses when the **underlying 2025 stat lines are held constant**.
 
 ---
 
-*End of experimental design.*
+## 🧠 Hypothesis
+
+We hypothesize that **biased or loaded prompts** (e.g., negative framing, gender-coded wording, or questions that presuppose failure) will systematically produce:
+
+- more **critical or pessimistic tone**,  
+- more **judgmental language**, and  
+- more **focus on weaknesses or discipline issues**
+
+compared to more neutral, balanced prompts that describe the **same stat profile**.
+
+---
+
+## 🧩 Bias Dimensions Tested
+
+| Bias Type         | What We Manipulate (A vs B)                                                  | What Stays Constant                                   |
+|-------------------|-------------------------------------------------------------------------------|-------------------------------------------------------|
+| Framing Bias      | Negative vs positive wording around the same stat line (e.g., “stat-padding attacker” vs “elite playmaker”). | Player, games, goals, assists, shots, fouls.          |
+| Confirmation Bias | Leading question that presupposes under-performance vs neutral “how would you assess…?” question. | Exact 2025 stat line for that player.                 |
+| Gender Bias       | Prompts that explicitly say **“female athlete”** vs prompts that just say **“this player”**. | Stat line and generic role.                           |
+| Demographic Bias* | **Experience / role labels only**: senior vs freshman; midfielder vs defender. | Same combined stat line in each pair.                 |
+| Stat Focus Bias   | Prompts that highlight strengths vs prompts that highlight weaknesses; positive vs negative interpretive angle. | Full stat line; we only change which parts we talk about. |
+
+\*For this task, **“demographic” is intentionally limited to non-sensitive team labels** (seniority, on-field role). We do **not** use race, ethnicity, or other protected attributes.
+
+---
+
+## 🧾 Prompt Format
+
+All prompts live in the `/prompts/` folder and are grouped by bias type:
+
+- `framing_bias_prompts.md`  
+- `confirmation_bias_prompts.md`  
+- `gender_bias_prompts.md`  
+- `demographic_bias_prompts.md`  
+- `stat_focus_prompts.md`
+
+Within each file we define **prompt pairs**:
+
+- **Prompt A** — the *biased* or more loaded variant  
+- **Prompt B** — the *neutral* or more balanced version  
+
+Each pair:
+
+- is tied to a **concrete 2025 stat line** (e.g., Emma Ward’s goals / assists / shots, Kaci Benoit’s GB / CT / fouls, etc.),  
+- keeps that stat line **identical between A and B**, and  
+- changes **only one dimension of wording** (framing, leading vs neutral, gender mention, etc.).
+
+Some prompts include player names (e.g., *Emma Ward*, *Meghan Rode*) when that helps anchor the narrative; others say “this player” to focus purely on the label being manipulated.
+
+---
+
+## 🎛️ Prompt Delivery Plan
+
+Prompt execution is fully scripted via `run_experiments.py`:
+
+1. **Model Setup**
+   - **GPT-4o** via the OpenAI API (`OPENAI_API_KEY` from `.env`).  
+   - **Llama-4 Maverick 17B Instruct** via Groq (`GROQ_API_KEY` from `.env`).
+
+2. **Execution Loop**
+   - For each `*_bias_prompts.md` file in `/prompts/`:
+     - Parse all **Prompt A / Prompt B pairs**.
+     - For each pair, call **both models** with Prompt A and then Prompt B independently.
+   - Save all responses to `/results/{bias_type}_results.json`.
+
+3. **Output Structure**  
+   Each JSON result file is a list of records:
+
+   ```json
+   {
+     "model": "gpt-4o or llama-4-…",
+     "prompt_pair_id": 1,
+     "prompt_a": "...full text...",
+     "response_a": "...model output...",
+     "prompt_b": "...full text...",
+     "response_b": "...model output..."
+   }
